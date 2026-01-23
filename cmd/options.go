@@ -60,6 +60,7 @@ var (
 	DefaultIgnoreResourceRules        = ""
 	DefaultArgocdLoginOptions         = ""
 	DefaultDisableClientThrottling    = false
+	DefaultArgocdAuthToken            = os.Getenv("ARGOCD_AUTH_TOKEN")
 )
 
 // RawOptions holds the raw CLI/env inputs - used only for parsing
@@ -88,6 +89,7 @@ type RawOptions struct {
 	WatchIfNoWatchPatternFound bool   `mapstructure:"watch-if-no-watch-pattern-found"`
 	AutoDetectFilesChanged     bool   `mapstructure:"auto-detect-files-changed"`
 	KeepClusterAlive           bool   `mapstructure:"keep-cluster-alive"`
+	ArgocdAuthToken            string `mapstructure:"argocd-auth-token"`
 	ArgocdNamespace            string `mapstructure:"argocd-namespace"`
 	ArgocdChartVersion         string `mapstructure:"argocd-chart-version"`
 	ArgocdChartName            string `mapstructure:"argocd-chart-name"`
@@ -126,6 +128,7 @@ type Config struct {
 	WatchIfNoWatchPatternFound bool
 	AutoDetectFilesChanged     bool
 	KeepClusterAlive           bool
+	ArgocdAuthToken            string
 	ArgocdNamespace            string
 	ArgocdChartVersion         string
 	ArgocdChartName            string
@@ -213,6 +216,7 @@ func Parse() *Config {
 	viper.SetDefault("cluster", DefaultCluster)
 	viper.SetDefault("cluster-name", DefaultClusterName)
 	viper.SetDefault("max-diff-length", DefaultMaxDiffLength)
+	viper.SetDefault("argocd-auth-token", DefaultArgocdAuthToken)
 	viper.SetDefault("argocd-namespace", DefaultArgocdNamespace)
 	viper.SetDefault("argocd-chart-version", DefaultArgocdChartVersion)
 	viper.SetDefault("argocd-chart-name", DefaultArgocdChartName)
@@ -241,6 +245,7 @@ func Parse() *Config {
 
 	// Argo CD related
 	rootCmd.Flags().String("argocd-chart-version", "", "Argo CD Helm Chart version")
+	rootCmd.Flags().String("argocd-auth-token", DefaultArgocdAuthToken, "Argo CD Authentication Token")
 	rootCmd.Flags().String("argocd-namespace", DefaultArgocdNamespace, "Namespace to use for Argo CD")
 	rootCmd.Flags().String("argocd-chart-name", DefaultArgocdChartName, "Argo CD Helm Chart name")
 	rootCmd.Flags().String("argocd-chart-url", DefaultArgocdChartURL, "Argo CD Helm Chart URL")
@@ -344,6 +349,7 @@ func (o *RawOptions) ToConfig() (*Config, error) {
 		WatchIfNoWatchPatternFound: o.WatchIfNoWatchPatternFound,
 		AutoDetectFilesChanged:     o.AutoDetectFilesChanged,
 		KeepClusterAlive:           o.KeepClusterAlive,
+		ArgocdAuthToken:            o.ArgocdAuthToken,
 		ArgocdNamespace:            o.ArgocdNamespace,
 		ArgocdChartVersion:         o.ArgocdChartVersion,
 		ArgocdChartName:            o.ArgocdChartName,
@@ -537,6 +543,11 @@ func (o *Config) LogConfig() {
 	log.Info().Msgf("✨ - argocd-namespace: %s", o.ArgocdNamespace)
 	log.Info().Msgf("✨ - repo: %s", o.Repo)
 	log.Info().Msgf("✨ - timeout: %d seconds", o.Timeout)
+
+	if o.ArgocdAuthToken != "" {
+		log.Info().Msgf("✨ - Authenticating via Argo CD Authentication Token:")
+	}
+
 	if o.LogFormat != DefaultLogFormat {
 		log.Info().Msgf("✨ - log-format: %s", o.LogFormat)
 	}

@@ -26,15 +26,37 @@ func (a *ArgoCDInstallation) getInitialPassword() (string, error) {
 	return secret, nil
 }
 
+func (a *ArgoCDInstallation) loginWithAuthToken() error {
+	args := []string{"login", "--insecure", "--auth-token", a.AuthToken}
+	if a.LoginOptions != "" {
+		args = append(args, strings.Fields(a.LoginOptions)...)
+	}
+	out, err := a.runArgocdCommand(args...)
+
+	if err != nil {
+		log.Error().Err(err).Msgf("❌ Argo CD command failed with %s", out)
+		return err
+	}
+	return nil
+}
+
 func (a *ArgoCDInstallation) login() error {
 	log.Info().Msgf("🦑 Logging in to Argo CD through CLI...")
-
+	if a.AuthToken != "" {
+		log.Info().Msgf("🦑 Authenticating via Argo CD authentication token...")
+		err := a.loginWithAuthToken()
+		if err != nil {
+			log.Error().Err(err).Msgf("❌ Failed to authenticate to Argo CD using Authentication Token")
+			return err
+		}
+	}
 	// Get initial admin password
 	password, err := a.getInitialPassword()
 	if err != nil {
 		return err
 	}
 
+	// Authentication Token Not Present, attempt admin login
 	maxAttempts := 10
 	for attempt := 1; attempt <= maxAttempts; attempt++ {
 		log.Debug().Msgf("Login attempt %d/%d to Argo CD...", attempt, maxAttempts)
