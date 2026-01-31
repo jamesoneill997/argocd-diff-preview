@@ -5,12 +5,14 @@ description: |
 on: 
   workflow_call: {}
   pull_request: {}
+
 concurrency:
   group: pr-action-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   - name: Install argocd-diff-preview
+    runs-on: ubuntu-latest
     uses: jamesoneill997/argocd-diff-preview/action/argocd_diff_preview@add-github-action #TODO: set this to master action in review
     with:
       version: '0.1.23'
