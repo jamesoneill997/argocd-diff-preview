@@ -10,7 +10,7 @@ inputs:
     type: string
     description: Runner operating system, options are 'Darwin-aarch64', 'Darwin-x86_64', 'Linux-aarch64', 'Linux-86_64'
     required: false
-    default: Linux
+    default: Linux-86_64
 
   github_token:
     type: string
