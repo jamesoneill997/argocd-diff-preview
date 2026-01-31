@@ -11,7 +11,9 @@ concurrency:
 jobs:
   install-argocd-diff-preview:
     runs-on: ubuntu-latest
-    uses: jamesoneill997/argocd-diff-preview/action/argocd_diff_preview@add-github-action #TODO: set this to master action in review
-    with:
-      version: '0.1.23'
+    steps:
+      - name: Install argocd diff preview
+        uses: jamesoneill997/argocd-diff-preview/action/argocd_diff_preview@add-github-action #TODO: set this to master action in review
+        with:
+          version: '0.1.23'
 
