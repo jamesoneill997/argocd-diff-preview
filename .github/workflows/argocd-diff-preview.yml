@@ -1,6 +1,5 @@
-name: ArgoCD Diff Preview Workflow
-description: |
-  Validate that the argocd-diff-preview composite action installs the binary
+name: "ArgoCD Diff Preview Workflow"
+description: "Validate that the argocd-diff-preview composite action installs the binary"
 
 on: 
   workflow_call: {}
