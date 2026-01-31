@@ -229,7 +229,7 @@ runs:
       shell: bash
       run: |
         curl -LJO https://github.com/dag-andersen/argocd-diff-preview/releases/download/v"${{ inputs.version }}"/argocd-diff-preview-"${{ inputs.os }}".tar.gz
-        tar -xvf argocd-diff-preview-"${{ inputs.os }}".tar.gz
+        tar -xvf argocd-diff-preview-${{ inputs.os }}.tar.gz
         sudo mv argocd-diff-preview /usr/local/bin
         echo "Verifying Installation..."
         argocd-diff-preview --help
