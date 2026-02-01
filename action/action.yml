@@ -232,4 +232,9 @@ runs:
         tar -xvf argocd-diff-preview-${{ inputs.os }}.tar.gz
         sudo mv argocd-diff-preview /usr/local/bin
         echo "Verifying Installation..."
-        argocd-diff-preview --help
+        argocd-diff-preview -v
+
+    - name: Parse inputs as arguments
+      shell: bash
+      run: |
+        echo ${{ inputs }}
