@@ -237,4 +237,4 @@ runs:
     - name: Parse inputs as arguments
       shell: bash
       run: |
-        echo ${{ inputs.*.[0] }}
+        echo ${{ inputs.*[0] }}
