@@ -8,9 +8,9 @@ inputs:
     default: "0.1.23"
   os:
     type: string
-    description: Runner operating system, options are 'Darwin-aarch64', 'Darwin-x86_64', 'Linux-aarch64', 'Linux-86_64'
+    description: Runner operating system, options are 'Darwin-aarch64', 'Darwin-x86_64', 'Linux-aarch64', 'Linux-x86_64. Default is 'Linux-x86_64'.
     required: false
-    default: Linux-86_64
+    default: Linux-x86_64
 
   github_token:
     type: string
