@@ -1,0 +1,19 @@
+name: "ArgoCD Diff Preview Workflow"
+
+on: 
+  workflow_call: {}
+  pull_request: {}
+
+concurrency:
+  group: pr-action-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  install-argocd-diff-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install argocd diff preview
+        uses: jamesoneill997/argocd-diff-preview/action@add-github-action #TODO: set this to master action in review
+        with:
+          version: '0.1.23'
+
